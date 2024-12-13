@@ -6,18 +6,14 @@ import { generatePagination } from "@/utils/utils";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
-  // NOTE: comment in this code when you get to this point in the course
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
-  
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
-  };
+export default function Pagination({
+  totalPages,
+  currentPage,
 
+}: {
+  currentPage: number;
+  totalPages: number;
+}) {
   const allPages = generatePagination(currentPage, totalPages);
 
   return (
@@ -25,11 +21,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       {/* NOTE: comment in this code when you get to this point in the course */}
 
       <div className="inline-flex">
-        <PaginationArrow
-          direction="left"
-          href={createPageURL(currentPage - 1)}
-          isDisabled={currentPage <= 1}
-        />
+        <PaginationArrow direction="left" isDisabled={currentPage <= 1} />
 
         <div className="flex -space-x-px">
           {allPages.map((page, index) => {
@@ -43,7 +35,6 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
             return (
               <PaginationNumber
                 key={page}
-                href={createPageURL(page)}
                 page={page}
                 position={position}
                 isActive={currentPage === page}
@@ -52,11 +43,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
           })}
         </div>
 
-        <PaginationArrow
-          direction="right"
-          href={createPageURL(currentPage + 1)}
-          isDisabled={currentPage >= totalPages}
-        />
+        <PaginationArrow direction="right" isDisabled={currentPage >= totalPages} />
       </div>
     </>
   );
@@ -64,12 +51,10 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
 function PaginationNumber({
   page,
-  href,
   isActive,
   position,
 }: {
   page: number | string;
-  href: string;
   position?: "first" | "last" | "middle" | "single";
   isActive: boolean;
 }) {
@@ -87,18 +72,14 @@ function PaginationNumber({
   return isActive || position === "middle" ? (
     <div className={className}>{page}</div>
   ) : (
-    <Link href={href} className={className}>
-      {page}
-    </Link>
+    <div className={className}>{page}</div>
   );
 }
 
 function PaginationArrow({
-  href,
   direction,
   isDisabled,
 }: {
-  href: string;
   direction: "left" | "right";
   isDisabled?: boolean;
 }) {
@@ -122,8 +103,6 @@ function PaginationArrow({
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link className={className} href={href}>
-      {icon}
-    </Link>
+    <div className={className}>{icon}</div>
   );
 }

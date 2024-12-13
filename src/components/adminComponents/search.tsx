@@ -1,29 +1,30 @@
 "use client";
 
+import { tokens } from "@/data/tokens";
+import axiosInstance from "@/utils/axiosInstance";
 import { Search as SearchIcon } from "lucide-react";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
 
-export default function Search({ placeholder }: { placeholder: string }) {
-  const searchParams = useSearchParams();
-  // example : searchParams.get('foo') // returns 'bar' when ?foo=bar
+export default function Search({
+  placeholder,
+  setProducts,
+}: {
+  placeholder: string;
+  setProducts: (products: any[]) => void;
+}) {
+  const handleSearch = async (term: string) => {
+    const res = await axiosInstance.get(
+      `/admin/product-app/products?search=${term}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${tokens.access}`,
+        },
+      }
+    );
 
-  const pathname = usePathname();
-  const { replace } = useRouter();
-
-  const handleSearch = useDebouncedCallback((term: string) => {
-    // efficient way of updating the query params ?foo=bar
-    const params = new URLSearchParams(searchParams);
-
-    // Reset page to 1 when searching
-    params.set("page", "1");
-    if (term) {
-      params.set("query", term); // ?query=term
-    } else {
-      params.delete("query");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
+    // @ts-ignore
+    setProducts(res?.results);
+  };
 
   return (
     <div className="relative flex flex-1 flex-shrink-0">
@@ -33,7 +34,6 @@ export default function Search({ placeholder }: { placeholder: string }) {
       <input
         className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
         placeholder={placeholder}
-        defaultValue={searchParams.get("query")?.toString()}
         onChange={(e) => {
           handleSearch(e.target.value);
         }}

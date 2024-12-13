@@ -25,7 +25,6 @@ export default function ProductsTable({ data }: { data: Product[] }) {
           {/* Mobile View */}
           <div className="md:hidden">
             {data?.map((product: Product) => {
-              console.log({ image: product?.featuredImage });
               return (
                 <div
                   key={product.id}

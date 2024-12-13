@@ -16,23 +16,35 @@ import { Product } from "@/types/definitions";
 // ----------------------------------------------------------------------
 
 export default function Page() {
-  const params = useParams();
-  const query = (params?.query as string) || "";
-  const currentPage = Number(params?.page) || 1;
   const [products, setProducts] = useState<Product[] | null>(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [offset, setOffSet] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axiosInstance.get("/admin/product-app/products", {
+        const res = await axiosInstance.get(
+          `/admin/product-app/products?limit=5&offset=${offset}`,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${tokens.access}`,
+            },
+          }
+        );
+
+        const resp = await axiosInstance.get("/admin/product-app/products", {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${tokens.access}`,
           },
         });
+
         // @ts-ignore
         setProducts(res?.results || []);
+        // @ts-ignore
+        setTotalPages(parseInt(resp.count / 5));
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -40,28 +52,17 @@ export default function Page() {
     fetchProducts();
   }, []);
 
-  // ----------------------------------------------------------------------
-  // FIXME - Fetch data from API
-  // const totalPages = await fetchProductsPages(query);
-  // const totalPages = 1;
-  // ----------------------------------------------------------------------
-
-  // ----------------------------------------------------------------------
-  // FIXME - Fetch data from API
-  // const Products = await fetchFilteredProducts(query, currentPage);
-  // ----------------------------------------------------------------------
-
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
         <h1 className="text-2xl">Products</h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search Products..." />
+        <Search placeholder="Search Products..." setProducts={setProducts} />
         <CreateProduct />
       </div>
       <Suspense
-        key={query + currentPage}
+        key={currentPage}
         fallback={<ProductsTableSkeleton />}
       ></Suspense>
       {products ? (
@@ -70,7 +71,7 @@ export default function Page() {
         <p className="text-center  my-8"> No products found</p>
       )}
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
       </div>
     </div>
   );
