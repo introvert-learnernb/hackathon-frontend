@@ -78,7 +78,6 @@ export default function ProductForm() {
       }
     });
 
-    console.log(formData);
     axiosInstance
       .post("/admin/product-app/products", formData, {
         headers: {

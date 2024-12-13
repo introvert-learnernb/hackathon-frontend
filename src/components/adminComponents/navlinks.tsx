@@ -1,6 +1,6 @@
 "use client";
 
-import { HomeIcon, User, ShoppingBag } from "lucide-react";
+import { HomeIcon, User, ShoppingBag, BriefcaseBusiness } from "lucide-react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,9 +9,14 @@ import clsx from "clsx";
 const links = [
   { name: "Dashboard", href: "/business/dashboard", icon: HomeIcon },
   {
-    name: "Profile",
-    href: "/business/profile",
+    name: "Farmer Profile",
+    href: "/business/profile-setup",
     icon: User,
+  },
+  {
+    name: "Business Profile",
+    href: "/business/business-setup",
+    icon: BriefcaseBusiness,
   },
   {
     name: "Product Setup",
