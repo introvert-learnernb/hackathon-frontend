@@ -1,9 +1,10 @@
-import HeaderAuth from "@/components/header-auth";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import HeaderAuth from "@/components/extra/header-auth";
+import { ThemeSwitcher } from "@/components/extra/theme-switcher";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
-import Link from "next/link";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: "Hackathon frontend",
@@ -24,8 +25,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <ToastContainer />
           <div className="flex fixed right-4 top-4 z-10">
-            <HeaderAuth /> <ThemeSwitcher />
+            <ThemeSwitcher />
           </div>
           {children}
         </ThemeProvider>
