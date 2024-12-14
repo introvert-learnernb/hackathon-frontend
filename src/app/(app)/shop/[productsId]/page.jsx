@@ -136,8 +136,40 @@ const ProductDescription = () => {
                   objectFit="cover"
                   className="rounded-t-lg md:rounded-l-lg md:rounded-t-none  w-full"
                 />
-              </div>
+    <div className="flex flex-col items-center">
+      {/* Product Info */}
+      <div className="min-h-72 bg-gray-50 flex items-center justify-center px-6 py-7">
+        <div className="w-full mb-20 sm:w-1/2 lg:w-1/2 flex justify-center items-center p-6 sm:p-8">
+          <img
+            src={product?.featuredImage || "/defaultImage/defaultImage.avif"}
+            alt={product?.name || "Product Image"}
+            className="h-4/6 w-4/6 object-cover rounded-lg shadow-md"
+          />
+        </div>
+        <div className="max-w-4xl bg-transparent rounded-lg overflow-hidden flex flex-col sm:flex-row w-full sm:w-1/2 lg:w-2/3 p-6 sm:p-10 -ml-24">
+          <div className="flex flex-col justify-between">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-semibold text-black mb-6 capitalize pl-2 border-l-8 border-primary">
+                {product?.name || "Product Name"}
+              </h1>
+              <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
+                {product?.description ||
+                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."}
+              </p>
+            </div>
 
+            <div className="mt-10">
+              <div className="flex items-center space-x-6 relative">
+                <span className="text-2xl sm:text-3xl font-semibold text-black">
+                  NRs {product?.originalPrice || 1000}
+                </span>
+                <span className="line-through text-gray-400 text-lg absolute bottom-5 left-32">
+                  NRs {product?.price || 400}
+                </span>
+                <p className="text-sm text-gray-500 mt-2 absolute -bottom-5 left-32">
+                  per kg
+                </p>
+              </div>
               <div className="p-6 flex flex-col justify-between">
                 <div>
                   <CardTitle className="text-3xl font-bold mb-4">
@@ -192,6 +224,21 @@ const ProductDescription = () => {
                     {farmerData?.businessType || "N/A"}
                   </p>
                   {farmerData?.backgroundStory && (
+                  <h1 className="text-xl sm:text-2xl font-semibold text-black mb-6 capitalize pl-2 border-l-8 border-primary">
+                    Farmer Info
+                  </h1>
+                  <div className="text-gray-600 text-base sm:text-lg leading-relaxed pl-10">
+                    <p>
+                      <strong>Name:</strong>{" "}
+                      {farmerData?.fullName || "Farmer's Name"}{" "}
+                    </p>
+                    <p>
+                      <strong>Contact:</strong> {farmerData?.contactNo || "N/A"}{" "}
+                    </p>
+                    <p>
+                      <strong>Business Type:</strong>{" "}
+                      {farmerData?.businessType || "N/A"}{" "}
+                    </p>
                     <p>
                       <strong>Background Story:</strong>{" "}
                       {farmerData.backgroundStory}
@@ -208,9 +255,55 @@ const ProductDescription = () => {
               )}
             </CardFooter>
           </Card>
+                  </div>
+                </div>
+
+                {/* Location and Map */}
+                <div className="mt-6 pl-10">
+                  {farmerData?.location ? (
+                    <button
+                      onClick={handleLocateSeller}
+                      className="px-6 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary focus:ring-4 focus:ring-primary transition duration-200"
+                    >
+                      Locate Seller
+                    </button>
+                  ) : (
+                    <p className="text-gray-500">Location not available</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {/* Additional Info & Reviews */}
+      <div className="p-6 font-sans bg-gray-50 mx-44 flex gap-7">
+        {/* Additional Info Section */}
+        {farmerInfo && (
+          <>
+            <div className="mb-10 bg-white shadow-lg rounded-lg p-6 w-1/2 ">
+              <h2 className="text-black uppercase text-2xl font-bold border-b-4 border-primarypb-2 mb-4 inline-block">
+                business into :
+              </h2>
+
+              <ul className="list-none space-y-4">
+                {Object.entries(additionalInfo).map(([key, value], index) => (
+                  <li key={index} className="text-gray-700 flex items-center">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                      <span className="font-semibold w-40 uppercase text-sm text-gray-600">
+                        {key.replace(/([A-Z])/g, " $1")}:
+                      </span>
+                      <span className="ml-2 text-gray-800 text-base">
+                        {value}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
         )}
       </div>
-
       {product?.reviews && product.reviews.length > 0 && (
         <Card>
           <CardHeader>
@@ -248,6 +341,46 @@ const ProductDescription = () => {
                       </div>
                     </div>
                     <p className="text-gray-600 mt-1">{review.reviewMessage}</p>
+        {/* Reviews Section */}
+
+        <div
+          className={`-mb-24 bg-gray-50 rounded-lg p-6 ${
+            !farmerInfo ? "w-full" : "w-1/2"
+          }`}
+        >
+          {productWithReview.reviews.length != 0 && (
+            <h2 className="text-black text-2xl font-bold border-b-4 border-primary pb-2 mb-4 inline-block">
+              REVIEWS :
+            </h2>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {productWithReview.reviews.map((review) => (
+              <div
+                key={review.id}
+                className="bg-white shadow-lg rounded-lg p-6 flex items-start gap-4"
+              >
+                <img
+                  src={
+                    review.createdBy.photo || "/defaultImage/unknownImage.jpg"
+                  }
+                  alt={review.createdBy.fullName}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-primary shadow-sm"
+                />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {review.createdBy.fullName || "Anonymous"}
+                  </h3>
+                  <div className="flex mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar
+                        key={i}
+                        className={`text-sm ${
+                          i < review.rating
+                            ? "text-primary"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
                   </div>
                 </div>
               ))}
@@ -255,7 +388,6 @@ const ProductDescription = () => {
           </CardContent>
         </Card>
       )}
-
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Write a Review</CardTitle>
@@ -282,6 +414,14 @@ const ProductDescription = () => {
                         : "text-gray-300"
                     }`}
                   />
+                    className="cursor-pointer"
+                  >
+                    {reviewData.rating >= star ? (
+                      <FaStar className="text-primary text-3xl" />
+                    ) : (
+                      <FaRegStar className="text-gray-300 text-3xl" />
+                    )}
+                  </span>
                 ))}
               </div>
             </div>
@@ -297,6 +437,8 @@ const ProductDescription = () => {
                   type="text"
                   id="name"
                   name="name"
+                  placeholder="Your Name"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={reviewData.name}
                   onChange={handleChange}
                   placeholder="Your name"
@@ -313,6 +455,8 @@ const ProductDescription = () => {
                   type="email"
                   id="email"
                   name="email"
+                  placeholder="Your Email"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={reviewData.email}
                   onChange={handleChange}
                   placeholder="Your email"
@@ -329,6 +473,8 @@ const ProductDescription = () => {
               <Textarea
                 id="description"
                 name="description"
+                placeholder="Write your review here..."
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 h-40 focus:outline-none focus:ring-2 focus:ring-primary"
                 value={reviewData.description}
                 onChange={handleChange}
                 placeholder="Write your review"
@@ -338,6 +484,14 @@ const ProductDescription = () => {
             <Button type="submit" className="w-full">
               Submit Review
             </Button>
+
+            <button
+              type="submit"
+              className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              onClick={handleReview}
+            >
+              Submit
+            </button>
           </form>
         </CardContent>
       </Card>

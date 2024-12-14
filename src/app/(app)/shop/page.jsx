@@ -83,6 +83,12 @@ const Shop = () => {
       <div className="main-container grid grid-cols-12 gap-8 px-6 py-8 bg-gray-100">
         <div className="col-span-3 bg-white rounded-lg shadow-lg">
           {/* <h2 className="text-lg font-semibold bg-primary text-primary-foreground p-3 text-center w-full rounded-t-md">
+      <div className=" px-5 bg-primary text-white w-full h-20 flex justify-center items-center font-bold text-3xl tracking-wide uppercase">
+        Shop Page
+      </div>
+      <div className="main-container grid grid-cols-12 gap-8 px-6 py-8 bg-gray-50">
+        <div className="col-span-3 bg-white rounded-lg shadow-md">
+          <h2 className="text-lg font-semibold text-white mb-4 bg-primary p-3 text-center w-full rounded-t-3xl tracking-wider">
             Filters
           </h2> */}
           <Categories onCategoryChange={handleCategoryChange} />
@@ -96,7 +102,7 @@ const Shop = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full h-12"
+                className="w-full h-12 p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
 
