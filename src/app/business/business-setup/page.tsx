@@ -6,6 +6,7 @@ import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
 import { tokens } from "@/data/tokens";
 import { Category } from "@/types/definitions";
+import Link from "next/link";
 
 export default function BusinessProfileForm() {
   interface Profile {
@@ -189,6 +190,7 @@ export default function BusinessProfileForm() {
       toast.error("Failed to update business profile!");
     }
   };
+
   const handleCategoryChange = (e: React.FormEvent<HTMLSelectElement>) => {
     //@ts-ignore
     const id = e.target.value;
@@ -206,10 +208,28 @@ export default function BusinessProfileForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Category */}
+      <div className="flex flex-col items-end">
+        {profile.isVerified ? (
+          <span className="py-2 px-3 bg-green-500 text-white rounded-full text-xs">
+            Verified account
+          </span>
+        ) : (
+          <div className="flex flex-col gap-2">
+            <Link
+              href="/business/verify"
+              className="text-end bg-secondary-foreground rounded-full text-secondary py-2 px-2 flex justify-center"
+            >
+              Verify Now
+            </Link>
+            <span className=" text-red-400 text-xs">
+              Not a verified account
+            </span>
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-1">
-          <label htmlFor="logo">Logo</label>
           {previewLogo && (
             <Image
               src={previewLogo}

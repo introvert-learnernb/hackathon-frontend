@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
 import { tokens } from "@/data/tokens";
+import { useRouter } from "next/navigation";
 
 export default function VerifyBusinessPage() {
   const [verificationData, setVerificationData] = useState({
@@ -20,6 +21,8 @@ export default function VerifyBusinessPage() {
     ownerIdPreview: "",
     addressProofPreview: "",
   });
+
+  const router = useRouter();
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -41,7 +44,7 @@ export default function VerifyBusinessPage() {
 
     try {
       const res = await axiosInstance.post(
-        "/api/v1/public/business-app/business-info/verify",
+        "/public/business-app/business-info/verify",
         formData,
         {
           headers: {
@@ -54,11 +57,11 @@ export default function VerifyBusinessPage() {
     } catch (err) {
       console.error("Error verifying business:", err);
       toast.error("Failed to submit business verification!");
-    }
+    } 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
       <div>
         <label htmlFor="registrationCertificate">
           Registration Certificate
@@ -76,9 +79,9 @@ export default function VerifyBusinessPage() {
           <Image
             src={previewImages.registrationCertificatePreview}
             alt="Registration Certificate Preview"
-            width={180}
-            height={180}
-            className="w-full aspect-square rounded-md border p-2"
+            width={160}
+            height={160}
+            className="w-full aspect-square object-contain rounded-md border p-2"
           />
         )}
       </div>
@@ -98,9 +101,9 @@ export default function VerifyBusinessPage() {
           <Image
             src={previewImages.taxCertificatePreview}
             alt="Tax Certificate Preview"
-            width={180}
-            height={180}
-            className="w-full aspect-square rounded-md border p-2"
+            width={160}
+            height={160}
+            className="w-full aspect-square object-contain rounded-md border p-2"
           />
         )}
       </div>
@@ -120,9 +123,9 @@ export default function VerifyBusinessPage() {
           <Image
             src={previewImages.ownerIdPreview}
             alt="Owner ID Preview"
-            width={180}
-            height={180}
-            className="w-full aspect-square rounded-md border p-2"
+            width={160}
+            height={160}
+            className="w-full aspect-square object-contain rounded-md border p-2"
           />
         )}
       </div>
@@ -142,9 +145,9 @@ export default function VerifyBusinessPage() {
           <Image
             src={previewImages.addressProofPreview}
             alt="Address Proof Preview"
-            width={180}
-            height={180}
-            className="w-full aspect-square rounded-md border p-2"
+            width={160}
+            height={160}
+            className="w-full aspect-square object-contain rounded-md border p-2"
           />
         )}
       </div>
