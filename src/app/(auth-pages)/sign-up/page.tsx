@@ -135,7 +135,7 @@ export default function Signup() {
                 value="Farmer"
                 checked={formData.accountType === "Farmer"}
                 onChange={handleChange}
-                className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
               />
               <Label htmlFor="farmer" className="ml-2 text-sm text-gray-700">
                 Farmer
@@ -149,7 +149,7 @@ export default function Signup() {
                 value="Customer"
                 checked={formData.accountType === "Customer"}
                 onChange={handleChange}
-                className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
               />
               <Label htmlFor="customer" className="ml-2 text-sm text-gray-700">
                 Customer
@@ -216,7 +216,7 @@ export default function Signup() {
 
           <button
             type="submit"
-            className="w-full mt-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:opacity-50"
+            className="w-full mt-4 bg-primary text-white py-2 rounded hover:bg-primary disabled:opacity-50"
             disabled={loading}
           >
             {loading ? "Signing up..." : "Sign up"}
@@ -239,7 +239,7 @@ export default function Signup() {
             </p>
             <button
               onClick={closeModal}
-              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+              className="mt-4 bg-primary text-white py-2 px-4 rounded hover:bg-primary"
             >
               Close
             </button>

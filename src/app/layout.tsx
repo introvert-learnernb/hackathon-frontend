@@ -1,6 +1,6 @@
 import HeaderAuth from "@/components/extra/header-auth";
 import { ThemeSwitcher } from "@/components/extra/theme-switcher";
-import { Montserrat } from "next/font/google"; // Import Montserrat font
+import { Montserrat } from "next/font/google"; 
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
@@ -17,6 +17,9 @@ const montserrat = Montserrat({
 export const metadata = {
   title: "Connect किसान",
   description: "KEC Hackathon 32 Hours",
+  icons: {
+    icon: "./favicon.ico",
+  },
 };
 
 export default function RootLayout({
