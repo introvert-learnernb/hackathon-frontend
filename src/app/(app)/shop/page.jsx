@@ -1,38 +1,38 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { FaSearch } from "react-icons/fa";
+import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
 import Categories from "@/components/Home/categories";
 import Ratings from "@/components/Home/rating";
 import ProductCard from "@/components/Home/card";
-import axiosInstance from "@/utils/axiosInstance";
+import { Input } from "@/components/ui/input";
+import SortBy from "@/components/Home/sortby";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("");
   const [selectedRating, setSelectedRating] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [sortBy, setSortBy] = useState(null);
 
   const router = useRouter();
 
   const fetchProducts = async (
     query = "",
-    sort = "",
+    sortBy,
     rating = null,
     categories = []
   ) => {
-    setLoading(true);
     try {
+      setLoading(true);
       const response = await axiosInstance.get(
         `/public/product-app/products?search=${query}`
       );
       let productData = response.results;
 
-      if (categories.length > 0) {
+      if (categories?.length > 0) {
         productData = productData.filter((product) =>
           categories.includes(product.categoryName)
         );
@@ -44,10 +44,14 @@ const Shop = () => {
         );
       }
 
-      if (sort === "lowToHigh") {
+      if (sortBy === "ascending") {
         productData = productData.sort((a, b) => a.offerPrice - b.offerPrice);
-      } else if (sort === "highToLow") {
+      }
+      if (sortBy === "descending") {
         productData = productData.sort((a, b) => b.offerPrice - a.offerPrice);
+      }
+      if (sortBy === "name") {
+        productData = productData.sort((a, b) => a.name - b.name);
       }
 
       setProducts(productData);
@@ -60,8 +64,8 @@ const Shop = () => {
   };
 
   useEffect(() => {
-    fetchProducts(searchTerm, sortOption, selectedRating, selectedCategories);
-  }, [searchTerm, sortOption, selectedRating, selectedCategories]);
+    fetchProducts(searchTerm, sortBy, selectedRating, selectedCategories);
+  }, [searchTerm, sortBy, selectedRating, selectedCategories]);
 
   const handleCategoryChange = (categories) => {
     setSelectedCategories(categories);
@@ -73,14 +77,14 @@ const Shop = () => {
 
   return (
     <>
-      <div className="container px-5 bg-yellow-400 text-black w-full h-20 flex justify-center items-center font-bold text-3xl">
+      <div className="bg-primary text-primary-foreground w-full h-20 flex justify-center items-center font-bold text-3xl">
         Shop Page
       </div>
-      <div className="main-container grid grid-cols-12 gap-8 px-6 py-8 bg-gray-50">
-        <div className="col-span-3 bg-white rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-yellow-400 mb-4 bg-black p-3 text-center w-full rounded-t-3xl">
+      <div className="main-container grid grid-cols-12 gap-8 px-6 py-8 bg-gray-100">
+        <div className="col-span-3 bg-white rounded-lg shadow-lg">
+          {/* <h2 className="text-lg font-semibold bg-primary text-primary-foreground p-3 text-center w-full rounded-t-md">
             Filters
-          </h2>
+          </h2> */}
           <Categories onCategoryChange={handleCategoryChange} />
           <Ratings onRatingSelect={setSelectedRating} />
         </div>
@@ -88,34 +92,29 @@ const Shop = () => {
         <div className="col-span-9">
           <div className="flex items-center justify-between mb-6">
             <div className="relative w-full max-w-lg">
-              <input
-                type="text"
+              <Input
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full h-12"
               />
-              <FaSearch className="absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-400" />
             </div>
 
             <div>
-              <select
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-                className="p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                <option value="">Sort By</option>
-                <option value="lowToHigh">Price: Low to High</option>
-                <option value="highToLow">Price: High to Low</option>
-              </select>
+              <SortBy setSortBy={setSortBy} />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {loading ? (
-              <div className="col-span-full text-center text-gray-600">
-                <p>Loading products...</p>
-              </div>
+              <>
+                <div className=" animate-pulse h-96 w-full"></div>
+                <div className=" animate-pulse h-96 w-full"></div>
+                <div className=" animate-pulse h-96 w-full"></div>
+                <div className=" animate-pulse h-96 w-full"></div>
+                <div className=" animate-pulse h-96 w-full"></div>
+                <div className=" animate-pulse h-96 w-full"></div>
+              </>
             ) : products.length > 0 ? (
               products.map((product) => (
                 <ProductCard
@@ -132,7 +131,7 @@ const Shop = () => {
                   onClick={() => handleClick(product.id)}
                   cardName={product.name}
                   unit={product.unit}
-                  totalReviews = {product.totalReviews}
+                  totalReviews={product.totalReviews}
                 />
               ))
             ) : (
