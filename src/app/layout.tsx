@@ -40,9 +40,8 @@ export default function RootLayout({
           <div className="flex fixed right-4 top-4 z-10">
             <ThemeSwitcher />
           </div>
-          <Header />
+          
           {children}
-          <Footer />
         </ThemeProvider>
       </body>
     </html>
