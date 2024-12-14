@@ -6,6 +6,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/components/homeComponents/header";
+import Footer from "@/components/Footer/Footer";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
           </div>
           <Header />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
