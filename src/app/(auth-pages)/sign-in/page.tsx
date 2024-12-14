@@ -1,5 +1,4 @@
 "use client";
-import { signInAction, signInWithGoogleAction } from "@/app/actions";
 import { SubmitButton } from "@/components/extra/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,7 +25,7 @@ export default function Login() {
       const payload = {
         persona: email,
         password: password,
-        redirectUrl: "verify-account",
+        redirectUrl: "/auth/callback",
       };
       const res = await axiosInstance.post(
         "/public/user-app/users/signin",
@@ -38,9 +37,10 @@ export default function Login() {
         localStorage.setItem("accessToken", res?.tokens?.access);
         localStorage.setItem("refreshToken", res?.tokens?.refresh);
         if (res?.roles.includes("Farmer")) {
-          return router.push("/dashboard");
+          return router.push("/business/profile-setup");
         } else {
-          router.push("/");
+          router.replace("/");
+          router.refresh();
         }
       } else {
         setError("Login failed. Please check your credentials.");
@@ -98,7 +98,7 @@ export default function Login() {
           />
           <SubmitButton
             pendingText="Signing In..."
-            formAction={signInAction}
+            // formAction={signInAction}
             disabled={isSubmitting}
           >
             Sign in
@@ -121,7 +121,7 @@ export default function Login() {
       {/* Google handler */}
       <form className="w-full max-w-md">
         <button
-          formAction={signInWithGoogleAction}
+          // formAction={signInWithGoogleAction}
           className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Image

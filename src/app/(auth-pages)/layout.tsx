@@ -5,9 +5,7 @@ export default async function Layout({
 }) {
   return (
     <div className="max-w-7xl">
-      <div className="container mx-auto h-screen">
-        {children}
-      </div>
+      <div className="container mx-auto py-12 pb-16">{children}</div>
     </div>
   );
 }

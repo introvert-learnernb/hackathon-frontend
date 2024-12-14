@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import AuthButton from "../extra/header-auth";
 import Image from "next/image";
@@ -17,11 +16,11 @@ export default function Header() {
         <Link href="/" className="flex items-baseline">
           <span className="h-8 text-4xl">
             <Image
-            alt="logo"
-            width={170}
-            height={170}
-            src={"/Logo.png"}
-            className="mb-5 ml-2"
+              alt="logo"
+              width={170}
+              height={170}
+              src={"/Logo.png"}
+              className="mb-5 ml-2"
             />
           </span>
         </Link>
@@ -62,12 +61,7 @@ export default function Header() {
 
         {/* Desktop Login Button */}
         <div className="hidden md:flex items-center space-x-4">
-          <Button asChild size="sm" variant={"outline"}>
-            <Link href="/sign-in">Sign in</Link>
-          </Button>
-          <Button asChild size="sm" variant={"default"}>
-            <Link href="/sign-up">Sign up</Link>
-          </Button>
+          <AuthButton />
         </div>
 
         {/* Mobile Menu */}
@@ -115,22 +109,7 @@ export default function Header() {
               >
                 Contact
               </Link>
-              <Button
-                variant="default"
-                asChild
-                className="w-full justify-start"
-                onClick={() => setIsOpen(false)}
-              >
-                <Link href="/sign-in">Sign in</Link>
-              </Button>
-              <Button
-                variant="default"
-                asChild
-                className="w-full justify-start"
-                onClick={() => setIsOpen(false)}
-              >
-                <Link href="/sign-up">Sign up</Link>
-              </Button>
+              <AuthButton />
             </div>
           </SheetContent>
         </Sheet>

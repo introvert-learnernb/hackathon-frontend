@@ -1,23 +1,67 @@
-import { signOutAction } from "@/app/actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/server";
+import axiosInstance from "@/utils/axiosInstance";
+import { useEffect, useState } from "react";
 
-export default async function AuthButton() {
-  const supabase = await createClient();
+export default function AuthButton() {
+  interface User {
+    id: number;
+    photo: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    fullName: string;
+    bio: string;
+    phoneNo: string;
+    email: string;
+    dateJoined: string; // ISO 8601 formatted date
+    isEmailVerified: boolean;
+    isPhoneVerified: boolean;
+    roles: string[];
+  }
+  const [user, setUser] = useState<User | null>(null);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const access = localStorage.getItem("accessToken");
+  const refresh = localStorage.getItem("refreshToken");
+
+  useEffect(() => {
+    if (!access || !refresh) return;
+    async function fetchUser() {
+      const user = await axiosInstance.get("/public/user-app/users/profile", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+      //@ts-ignore
+      setUser(user);
+    }
+    fetchUser();
+  }, [access, refresh]);
+
+  const handleSignOut = async () => {
+    await axiosInstance.post(
+      "/public/user-app/users/logout",
+      { refresh },
+      {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      }
+    );
+
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
+    setUser(null);
+  };
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
-      </form>
+      {/* @ts-ignore */}
+      Hey, {user.fullName}!
+      <Button type="submit" variant={"outline"} onClick={handleSignOut}>
+        Sign out
+      </Button>
     </div>
   ) : (
     <div className="flex gap-2">
