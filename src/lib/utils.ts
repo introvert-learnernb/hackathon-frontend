@@ -8,10 +8,13 @@ export function cn(...inputs: ClassValue[]) {
 import { Revenue } from "@/types/definitions";
 
 export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
+  return amount
+    .toLocaleString("ne-NP", {
+      style: "currency",
+      currency: "NPR",
+      currencyDisplay: "code",
+    })
+    .replace("NPR", "रु");
 };
 
 export const formatDateToLocal = (

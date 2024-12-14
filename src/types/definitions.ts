@@ -21,6 +21,7 @@ export interface Product {
   stockQuantity: number;
   isActive: boolean; // Product status
   category: any; // New field added
+  description?: string;
 }
 
 export interface Category {
