@@ -100,7 +100,6 @@ export default function EditForm() {
     const formData = new FormData();
 
     Object.entries(product).forEach(([key, value]) => {
-      console.log("data", product);
       if (key === "featuredImage") {
         if (value instanceof File) {
           formData.append(key, value);

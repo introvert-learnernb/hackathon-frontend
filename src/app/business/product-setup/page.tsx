@@ -71,7 +71,10 @@ export default function Page() {
         <p className="text-center  my-8"> No products found</p>
       )}
       <div className="mt-5 flex w-full justify-center">
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
+        <Pagination
+          currentPage={totalPages - offset * 5}
+          totalPages={totalPages}
+        />
       </div>
     </div>
   );
