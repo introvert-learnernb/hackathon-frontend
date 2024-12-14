@@ -24,7 +24,7 @@ const Ratings = ({ onRatingSelect }) => {
 
   return (
     <div className="ratings bg-white p-4 rounded-lg mt-6">
-      <h3 className="text-xl font-semibold mb-4 pl-2 border-l-4 border-yellow-400">
+      <h3 className="text-xl font-semibold mb-4 pl-2 border-l-4 border-primary">
         Ratings
       </h3>
 
@@ -38,7 +38,7 @@ const Ratings = ({ onRatingSelect }) => {
               name="rating"
               value={stars}
               checked={selectedRating === stars} 
-              className="h-4 w-4 text-green-500 border-gray-300 rounded focus:ring-green-500"
+              className="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
               onChange={() => handleRatingChange(stars)} 
             />
             <label
@@ -47,7 +47,7 @@ const Ratings = ({ onRatingSelect }) => {
             >
               {Array.from({ length: 5 }, (_, starIndex) =>
                 starIndex < stars ? (
-                  <FaStar key={starIndex} className="text-yellow-400" />
+                  <FaStar key={starIndex} className="text-primary" />
                 ) : (
                   <FaRegStar key={starIndex} className="text-gray-300" />
                 )
@@ -58,7 +58,7 @@ const Ratings = ({ onRatingSelect }) => {
       </ul>
 
       <button
-        className="mt-8 bg-green-500 border-2 border-transparent text-white px-5 py-2 rounded-lg hover:bg-transparent hover:border-2 hover:border-green-500 hover:text-green-500 transition-all duration-300"
+        className="mt-8 bg-primary border-2 border-transparent text-white px-5 py-2 rounded-lg hover:bg-transparent hover:border-2 hover:border-primary hover:text-primary transition-all duration-300"
         onClick={handleClearFilter}
       >
         Clear Filter

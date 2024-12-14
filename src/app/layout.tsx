@@ -5,10 +5,11 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "@/components/homeComponents/header";
 
 export const metadata = {
-  title: "Hackathon frontend",
-  description: "Best hackathon prject",
+  title: "Connect किसान",
+  description: "KEC Hackathon 32 Hours",
 };
 
 export default function RootLayout({
@@ -29,6 +30,7 @@ export default function RootLayout({
           <div className="flex fixed right-4 top-4 z-10">
             <ThemeSwitcher />
           </div>
+          <Header />
           {children}
         </ThemeProvider>
       </body>

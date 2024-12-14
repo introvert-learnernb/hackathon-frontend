@@ -4,7 +4,6 @@ import Hero from "@/components/homeComponents/hero";
 export default async function Index() {
   return (
     <>
-      <Header />
       <Hero />
     </>
   );

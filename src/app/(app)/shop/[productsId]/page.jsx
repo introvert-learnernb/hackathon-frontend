@@ -199,7 +199,7 @@ const ProductDescription = () => {
         <div className="max-w-4xl bg-transparent rounded-lg overflow-hidden flex flex-col sm:flex-row w-full sm:w-1/2 lg:w-2/3 p-6 sm:p-10 -ml-24">
           <div className="flex flex-col justify-between">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-semibold text-black mb-6 capitalize pl-2 border-l-8 border-yellow-400">
+              <h1 className="text-3xl sm:text-4xl font-semibold text-black mb-6 capitalize pl-2 border-l-8 border-primary">
                 {product?.name || "Product Name"}
               </h1>
               <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
@@ -239,7 +239,7 @@ const ProductDescription = () => {
             <div className="max-w-lg bg-transparent rounded-lg overflow-hidden flex flex-col sm:flex-row w-full sm:w-1/2 lg:w-2/3 p-6 sm:p-10 -ml-24">
               <div className="flex flex-col justify-between">
                 <div>
-                  <h1 className="text-xl sm:text-2xl font-semibold text-black mb-6 capitalize pl-2 border-l-8 border-yellow-400">
+                  <h1 className="text-xl sm:text-2xl font-semibold text-black mb-6 capitalize pl-2 border-l-8 border-primary">
                     Farmer Info
                   </h1>
                   <div className="text-gray-600 text-base sm:text-lg leading-relaxed pl-10">
@@ -266,7 +266,7 @@ const ProductDescription = () => {
                   {farmerData?.location ? (
                     <button
                       onClick={handleLocateSeller}
-                      className="px-6 py-2 bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 transition duration-200"
+                      className="px-6 py-2 bg-primary text-white rounded-lg shadow-md hover:bg-primary focus:ring-4 focus:ring-primary transition duration-200"
                     >
                       Locate Seller
                     </button>
@@ -285,7 +285,7 @@ const ProductDescription = () => {
         {farmerInfo && (
           <>
             <div className="mb-10 bg-white shadow-lg rounded-lg p-6 w-1/2 ">
-              <h2 className="text-black uppercase text-2xl font-bold border-b-4 border-yellow-400 pb-2 mb-4 inline-block">
+              <h2 className="text-black uppercase text-2xl font-bold border-b-4 border-primarypb-2 mb-4 inline-block">
                 business into :
               </h2>
 
@@ -315,7 +315,7 @@ const ProductDescription = () => {
           }`}
         >
           {productWithReview.reviews.length != 0 && (
-            <h2 className="text-black text-2xl font-bold border-b-4 border-yellow-400 pb-2 mb-4 inline-block">
+            <h2 className="text-black text-2xl font-bold border-b-4 border-primary pb-2 mb-4 inline-block">
               REVIEWS :
             </h2>
           )}
@@ -330,7 +330,7 @@ const ProductDescription = () => {
                     review.createdBy.photo || "/defaultImage/unknownImage.jpg"
                   }
                   alt={review.createdBy.fullName}
-                  className="w-16 h-16 rounded-full object-cover border-2 border-yellow-400 shadow-sm"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-primary shadow-sm"
                 />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800">
@@ -342,7 +342,7 @@ const ProductDescription = () => {
                         key={i}
                         className={`text-sm ${
                           i < review.rating
-                            ? "text-yellow-500"
+                            ? "text-primary"
                             : "text-gray-300"
                         }`}
                       />
@@ -385,7 +385,7 @@ const ProductDescription = () => {
                     className="cursor-pointer"
                   >
                     {reviewData.rating >= star ? (
-                      <FaStar className="text-yellow-400 text-3xl" />
+                      <FaStar className="text-primary text-3xl" />
                     ) : (
                       <FaRegStar className="text-gray-300 text-3xl" />
                     )}
@@ -407,7 +407,7 @@ const ProductDescription = () => {
                   id="name"
                   name="name"
                   placeholder="Your Name"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={reviewData.name}
                   onChange={handleChange}
                 />
@@ -424,7 +424,7 @@ const ProductDescription = () => {
                   id="email"
                   name="email"
                   placeholder="Your Email"
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
                   value={reviewData.email}
                   onChange={handleChange}
                 />
@@ -442,7 +442,7 @@ const ProductDescription = () => {
                 id="description"
                 name="description"
                 placeholder="Write your review here..."
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 h-40 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 h-40 focus:outline-none focus:ring-2 focus:ring-primary"
                 value={reviewData.description}
                 onChange={handleChange}
               ></textarea>
@@ -450,7 +450,7 @@ const ProductDescription = () => {
 
             <button
               type="submit"
-              className="w-full bg-yellow-500 text-white font-semibold py-3 rounded-lg hover:bg-yellow-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+              className="w-full bg-primary text-white font-semibold py-3 rounded-lg hover:bg-primary transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               onClick={handleReview}
             >
               Submit

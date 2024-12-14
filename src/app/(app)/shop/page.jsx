@@ -73,12 +73,12 @@ const Shop = () => {
 
   return (
     <>
-      <div className="container px-5 bg-yellow-400 text-black w-full h-20 flex justify-center items-center font-bold text-3xl">
+      <div className=" px-5 bg-primary text-white w-full h-20 flex justify-center items-center font-bold text-3xl tracking-wide uppercase">
         Shop Page
       </div>
       <div className="main-container grid grid-cols-12 gap-8 px-6 py-8 bg-gray-50">
         <div className="col-span-3 bg-white rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-yellow-400 mb-4 bg-black p-3 text-center w-full rounded-t-3xl">
+          <h2 className="text-lg font-semibold text-white mb-4 bg-primary p-3 text-center w-full rounded-t-3xl tracking-wider">
             Filters
           </h2>
           <Categories onCategoryChange={handleCategoryChange} />
@@ -93,7 +93,7 @@ const Shop = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full p-3 border rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <FaSearch className="absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-400" />
             </div>
