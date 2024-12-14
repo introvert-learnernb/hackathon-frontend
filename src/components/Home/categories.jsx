@@ -33,7 +33,7 @@ const Categories = ({ onCategoryChange = () => {} }) => {
 
   return (
     <div className="categories bg-white p-4 rounded-lg ">
-      <h3 className="text-xl font-bold mb-4 pl-2 border-l-4 border-yellow-400">
+      <h3 className="text-xl font-bold mb-4 pl-2 border-l-4 border-primary">
         Product Categories
       </h3>
       <ul className="space-y-2">
