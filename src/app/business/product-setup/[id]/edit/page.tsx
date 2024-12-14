@@ -1,6 +1,5 @@
 "use client";
 
-import { tokens } from "@/data/tokens";
 import { Category, unit } from "@/types/definitions";
 import axiosInstance from "@/utils/axiosInstance";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -37,7 +36,7 @@ export default function EditForm() {
     try {
       const res = await axiosInstance.get(`/admin/product-app/products/${id}`, {
         headers: {
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
 
@@ -59,7 +58,7 @@ export default function EditForm() {
     try {
       const res = await axiosInstance.get("/admin/product-app/categories", {
         headers: {
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       // @ts-ignore
@@ -129,7 +128,7 @@ export default function EditForm() {
       await axiosInstance.patch(`/admin/product-app/products/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       toast.success("Product updated successfully!");

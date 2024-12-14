@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
-import { tokens } from "@/data/tokens";
 import nameSplit from "@/utils/nameSplit";
 
 export default function FarmerProfileForm() {
@@ -36,7 +35,7 @@ export default function FarmerProfileForm() {
     try {
       const res = await axiosInstance.get("/public/user-app/users/profile", {
         headers: {
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       console.log(res);
@@ -102,7 +101,7 @@ export default function FarmerProfileForm() {
       await axiosInstance.patch("/public/user-app/users/profile/update", data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       toast.success("Profile updated successfully!");
@@ -113,114 +112,117 @@ export default function FarmerProfileForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="flex-1">
-          {previewImage && (
-            <Image
-              src={previewImage}
-              alt="Profile Image"
-              width={180}
-              height={180}
-              className=" w-full aspect-square rounded-md border p-2"
-            />
-          )}
-          <div className="flex-1 mt-4">
-            <label htmlFor="photo">Profile Picture</label>
-            <input
-              type="file"
-              id="photo"
-              name="photo"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="block w-full rounded-md border p-2"
-            />
+    <>
+      <h1 className="text-2xl mb-5">Your Profile</h1>
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            {previewImage && (
+              <Image
+                src={previewImage}
+                alt="Profile Image"
+                width={180}
+                height={180}
+                className=" w-full aspect-square rounded-md border p-2"
+              />
+            )}
+            <div className="flex-1 mt-4">
+              <label htmlFor="photo">Profile Picture</label>
+              <input
+                type="file"
+                id="photo"
+                name="photo"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-between flex-[2]">
+            <div>
+              <label htmlFor="name">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={profile.name}
+                onChange={handleInputChange}
+                required
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="phoneNo">Phone Number</label>
+              <input
+                type="text"
+                id="phoneNo"
+                name="phoneNo"
+                value={profile.phoneNo}
+                onChange={handleInputChange}
+                required
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
+
+            <div>
+              {" "}
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={profile.email}
+                disabled
+                className="block w-full rounded-md border p-2 bg-gray-200"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                value={profile.bio}
+                onChange={handleInputChange}
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col justify-between flex-[2]">
+        <div className="flex gap-4">
           <div>
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="dateJoined">Date Joined</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={profile.name}
-              onChange={handleInputChange}
-              required
-              className="block w-full rounded-md border p-2"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="phoneNo">Phone Number</label>
-            <input
-              type="text"
-              id="phoneNo"
-              name="phoneNo"
-              value={profile.phoneNo}
-              onChange={handleInputChange}
-              required
-              className="block w-full rounded-md border p-2"
-            />
-          </div>
-
-          <div>
-            {" "}
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={profile.email}
+              id="dateJoined"
+              name="dateJoined"
+              value={new Date(profile.dateJoined).toLocaleDateString()}
               disabled
               className="block w-full rounded-md border p-2 bg-gray-200"
             />
           </div>
 
-          <div>
-            <label htmlFor="bio">Bio</label>
-            <textarea
-              id="bio"
-              name="bio"
-              value={profile.bio}
-              onChange={handleInputChange}
-              className="block w-full rounded-md border p-2"
-            />
+          <div className="flex gap-4 ">
+            <div className="flex mt-6 items-center gap-4">
+              <span>
+                Email Verified: {profile.isEmailVerified ? "Yes✅" : "No❌"}
+              </span>
+              <span>
+                Phone Verified: {profile.isPhoneVerified ? "Yes✅" : "No❌"}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex gap-4">
-        <div>
-          <label htmlFor="dateJoined">Date Joined</label>
-          <input
-            type="text"
-            id="dateJoined"
-            name="dateJoined"
-            value={new Date(profile.dateJoined).toLocaleDateString()}
-            disabled
-            className="block w-full rounded-md border p-2 bg-gray-200"
-          />
-        </div>
-
-        <div className="flex gap-4 ">
-          <div className="flex mt-6 items-center gap-4">
-            <span>
-              Email Verified: {profile.isEmailVerified ? "Yes✅" : "No❌"}
-            </span>
-            <span>
-              Phone Verified: {profile.isPhoneVerified ? "Yes✅" : "No❌"}
-            </span>
-          </div>
-        </div>
-      </div>
-      <button
-        type="submit"
-        className="px-4 py-3 mt-6 w-full bg-blue-600 text-white rounded-md"
-      >
-        Update Profile
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="px-4 py-3 mt-6 w-full bg-blue-600 text-white rounded-md"
+        >
+          Update Profile
+        </button>
+      </form>
+    </>
   );
 }
