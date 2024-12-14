@@ -10,7 +10,6 @@ import { ProductsTableSkeleton } from "@/components/adminComponents/skeletons";
 // ----------------------------------------------------------------------
 // FIXME - Fetch data from API
 import axiosInstance from "@/utils/axiosInstance";
-import { tokens } from "@/data/tokens";
 import { useParams } from "next/navigation";
 import { Product } from "@/types/definitions";
 // ----------------------------------------------------------------------
@@ -29,7 +28,7 @@ export default function Page() {
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${tokens.access}`,
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
           }
         );
@@ -37,7 +36,7 @@ export default function Page() {
         const resp = await axiosInstance.get("/admin/product-app/products", {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tokens.access}`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         });
 

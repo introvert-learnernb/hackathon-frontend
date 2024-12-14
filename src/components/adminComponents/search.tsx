@@ -1,6 +1,5 @@
 "use client";
 
-import { tokens } from "@/data/tokens";
 import axiosInstance from "@/utils/axiosInstance";
 import { Search as SearchIcon } from "lucide-react";
 
@@ -17,7 +16,7 @@ export default function Search({
       {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }
     );

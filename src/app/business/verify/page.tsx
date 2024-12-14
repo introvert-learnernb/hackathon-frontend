@@ -4,7 +4,6 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
-import { tokens } from "@/data/tokens";
 import { useRouter } from "next/navigation";
 
 export default function VerifyBusinessPage() {
@@ -49,7 +48,7 @@ export default function VerifyBusinessPage() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tokens.access}`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
@@ -57,7 +56,7 @@ export default function VerifyBusinessPage() {
     } catch (err) {
       console.error("Error verifying business:", err);
       toast.error("Failed to submit business verification!");
-    } 
+    }
   };
 
   return (

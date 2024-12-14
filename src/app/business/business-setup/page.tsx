@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
-import { tokens } from "@/data/tokens";
 import { Category } from "@/types/definitions";
 import Link from "next/link";
 
@@ -44,7 +43,7 @@ export default function BusinessProfileForm() {
     try {
       const res = await axiosInstance.get("/public/business-app/categories", {
         headers: {
-          Authorization: `Bearer ${tokens.access}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
       // @ts-ignore
@@ -79,7 +78,7 @@ export default function BusinessProfileForm() {
         "/public/business-app/business-info",
         {
           headers: {
-            Authorization: `Bearer ${tokens.access}`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
@@ -169,7 +168,7 @@ export default function BusinessProfileForm() {
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${tokens.access}`,
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
               },
             }
           )
@@ -179,7 +178,7 @@ export default function BusinessProfileForm() {
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${tokens.access}`,
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
               },
             }
           );
@@ -206,8 +205,9 @@ export default function BusinessProfileForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <>
       {/* Category */}
+      <h1 className="text-2xl mb-5">Business Information</h1>
       <div className="flex flex-col items-end">
         {profile.isVerified ? (
           <span className="py-2 px-3 bg-green-500 text-white rounded-full text-xs">
@@ -228,113 +228,115 @@ export default function BusinessProfileForm() {
         )}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="flex-1">
-          {previewLogo && (
-            <Image
-              src={previewLogo}
-              alt="Business Logo"
-              width={200}
-              height={200}
-              className="rounded-md aspect-square w-full mb-4"
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1">
+            {previewLogo && (
+              <Image
+                src={previewLogo}
+                alt="Business Logo"
+                width={200}
+                height={200}
+                className="rounded-md aspect-square w-full mb-4"
+              />
+            )}
+            <input
+              type="file"
+              id="logo"
+              name="logo"
+              accept="image/*"
+              onChange={handleLogoUpload}
+              className="block w-full rounded-md border p-2"
             />
-          )}
+          </div>
+          <div className="flex flex-col justify-between flex-[2]">
+            <div>
+              <label htmlFor="businessName">Business Name</label>
+              <input
+                type="text"
+                id="businessName"
+                name="businessName"
+                value={profile.businessName}
+                onChange={handleInputChange}
+                required
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="category">Category</label>
+              <select
+                id="category"
+                name="category"
+                onChange={handleCategoryChange}
+                required
+                className="block w-full rounded-md border p-2"
+              >
+                {categories?.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={profile.description}
+                onChange={handleInputChange}
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="story">Story</label>
+              <textarea
+                id="story"
+                name="story"
+                value={profile.story}
+                onChange={handleInputChange}
+                className="block w-full rounded-md border p-2"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="contactEmail">Contact Email</label>
           <input
-            type="file"
-            id="logo"
-            name="logo"
-            accept="image/*"
-            onChange={handleLogoUpload}
+            type="email"
+            id="contactEmail"
+            name="contactEmail"
+            value={profile.contactEmail}
+            onChange={handleInputChange}
+            required
             className="block w-full rounded-md border p-2"
           />
         </div>
-        <div className="flex flex-col justify-between flex-[2]">
-          <div>
-            <label htmlFor="businessName">Business Name</label>
-            <input
-              type="text"
-              id="businessName"
-              name="businessName"
-              value={profile.businessName}
-              onChange={handleInputChange}
-              required
-              className="block w-full rounded-md border p-2"
-            />
-          </div>
 
-          <div>
-            <label htmlFor="category">Category</label>
-            <select
-              id="category"
-              name="category"
-              onChange={handleCategoryChange}
-              required
-              className="block w-full rounded-md border p-2"
-            >
-              {categories?.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              value={profile.description}
-              onChange={handleInputChange}
-              className="block w-full rounded-md border p-2"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="story">Story</label>
-            <textarea
-              id="story"
-              name="story"
-              value={profile.story}
-              onChange={handleInputChange}
-              className="block w-full rounded-md border p-2"
-            />
-          </div>
+        <div className="flex-1">
+          <label htmlFor="contactNo">Contact Number</label>
+          <input
+            type="text"
+            id="contactNo"
+            name="contactNo"
+            value={profile.contactNo}
+            onChange={handleInputChange}
+            required
+            className="block w-full rounded-md border p-2"
+          />
         </div>
-      </div>
 
-      <div>
-        <label htmlFor="contactEmail">Contact Email</label>
-        <input
-          type="email"
-          id="contactEmail"
-          name="contactEmail"
-          value={profile.contactEmail}
-          onChange={handleInputChange}
-          required
-          className="block w-full rounded-md border p-2"
-        />
-      </div>
-
-      <div className="flex-1">
-        <label htmlFor="contactNo">Contact Number</label>
-        <input
-          type="text"
-          id="contactNo"
-          name="contactNo"
-          value={profile.contactNo}
-          onChange={handleInputChange}
-          required
-          className="block w-full rounded-md border p-2"
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="px-4 py-3 w-full bg-blue-600 text-white rounded-md"
-      >
-        Update Business Profile
-      </button>
-    </form>
+        <button
+          type="submit"
+          className="px-4 py-3 w-full bg-blue-600 text-white rounded-md"
+        >
+          Update Business Profile
+        </button>
+      </form>
+    </>
   );
 }

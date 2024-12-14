@@ -1,6 +1,8 @@
 import Link from "next/link";
 import NavLinks from "@/components/adminComponents/navlinks";
 import { PowerIcon } from "lucide-react";
+import Image from "next/image";
+import Logo from "./logo.png";
 
 export default function SideNav() {
   return (
@@ -9,9 +11,7 @@ export default function SideNav() {
         className="mb-2 flex items-end justify-start rounded-md bg-blue-600 pt-6 px-4 pb-4"
         href="/"
       >
-        <div className="w-32 text-xl sm:text-3xl text-white md:w-40 ">
-          farmerhub
-        </div>
+        <Image src={Logo} width={200} height={200} alt="Connect Farmer" />
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />

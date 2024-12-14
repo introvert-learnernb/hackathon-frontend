@@ -9,7 +9,7 @@ const ProductCard = ({
   cardName,
   unit,
   onClick,
-  totalReviews
+  totalReviews,
 }) => {
   const maxStars = 5;
 
@@ -21,13 +21,13 @@ const ProductCard = ({
       <div className="relative">
         {percentDisc && (
           <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded shadow-md">
-            {percentDisc}
+            {percentDisc} off
           </span>
         )}
         <img
           src={imageUrl}
           alt={cardName}
-          className="w-full h-64 p-4 object-cover"
+          className="w-full h-64 p-4 object-cover rounded-md"
         />
       </div>
 
