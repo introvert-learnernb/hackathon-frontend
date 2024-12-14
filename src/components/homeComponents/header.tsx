@@ -18,43 +18,43 @@ export default function Header() {
           <span className="h-8 text-4xl">
             <Image
             alt="logo"
-            width={150}
-            height={150}
+            width={170}
+            height={170}
             src={"/Logo.png"}
-            className="mt-3"
+            className="mb-5 ml-2"
             />
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center gap-12">
           <Link
             href="/"
-            className="text-md font-semibold font-sans text-secondary-foreground hover:text-primary transition-colors"
+            className="text-md font-bold font-sans text-secondary-foreground hover:text-primary transition-colors"
           >
             Home
           </Link>
           <Link
             href="/shop"
-            className="text-md font-semibold font-sans text-secondary-foreground hover:text-primary transition-colors"
+            className="text-md font-bold font-sans text-secondary-foreground hover:text-primary transition-colors"
           >
             Shop
           </Link>
           <Link
             href="/about"
-            className="text-md font-semibold font-sans text-secondary-foreground hover:text-primary transition-colors"
+            className="text-md font-bold font-sans text-secondary-foreground hover:text-primary transition-colors"
           >
             About
           </Link>
           <Link
             href="/disclaimer"
-            className="text-md font-semibold font-sans text-secondary-foreground hover:text-primary transition-colors"
+            className="text-md font-bold font-sans text-secondary-foreground hover:text-primary transition-colors"
           >
             Disclaimer
           </Link>
           <Link
             href="/contact"
-            className="text-md font-semibold font-sans text-secondary-foreground hover:text-primary transition-colors"
+            className="text-md font-bold font-sans text-secondary-foreground hover:text-primary transition-colors"
           >
             Contact
           </Link>
