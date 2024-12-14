@@ -1,17 +1,64 @@
+"use client";
 import { signInAction, signInWithGoogleAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/extra/form-message";
 import { SubmitButton } from "@/components/extra/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import axiosInstance from "@/utils/axiosInstance";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-export default async function Login(props: { searchParams: Promise<Message> }) {
-  const searchParams = await props.searchParams;
+export default function Login() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const payload = {
+        persona: email,
+        password: password,
+        redirectUrl: "verify-account",
+      };
+      const res = await axiosInstance.post(
+        "/public/user-app/users/signin",
+        payload
+      );
+
+      if (res) {
+        toast.success(res?.message);
+        localStorage.setItem("accessToken", res?.tokens?.access);
+        localStorage.setItem("refreshToken", res?.tokens?.refresh);
+        if (res?.roles.includes("Farmer")) {
+          return router.push("/dashboard");
+        } else {
+          router.push("/");
+        }
+      } else {
+        setError("Login failed. Please check your credentials.");
+      }
+    } catch (err) {
+      const error_message = "Invalid Credentials, Try Again!";
+      setError(error_message);
+      toast.error(error_message);
+      setPassword("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       {/* Email handler */}
-      <form className="max-w-md  w-full flex flex-col">
+      <form className="max-w-md w-full flex flex-col" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-medium">Sign in</h1>
         <p className="text-sm text-foreground">
           Don't have an account?{" "}
@@ -24,7 +71,14 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
+          <Input
+            name="email"
+            placeholder="you@example.com"
+            required
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <div className="flex justify-between items-center">
             <Label htmlFor="password">Password</Label>
             <Link
@@ -39,11 +93,17 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             name="password"
             placeholder="Your password"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <SubmitButton pendingText="Signing In..." formAction={signInAction}>
+          <SubmitButton
+            pendingText="Signing In..."
+            formAction={signInAction}
+            disabled={isSubmitting}
+          >
             Sign in
           </SubmitButton>
-          <FormMessage message={searchParams} />
+          {error && <div className="text-red-500 mt-2">{error}</div>}
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">

@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
-import Image from "next/image";
 import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import nameSplit from "@/utils/nameSplit";
 import axiosInstance from "@/utils/axiosInstance";
+import { toast } from "react-toastify";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -16,11 +14,13 @@ export default function Signup() {
     password: "",
     name: "",
     phone: "",
+    accountType: "Customer", // Default value is "Customer"
     hasAcceptedTerms: false,
   });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,14 +54,39 @@ export default function Signup() {
       firstName,
       middleName,
       lastName,
+      accountType: formData.accountType,
       hasAcceptedTerms: formData.hasAcceptedTerms,
       redirectUrl: "/auth/callback",
     };
 
     try {
-      const res = await axiosInstance.post("/public/user-app/users/signup", data);
-      console.log(res.data);
-      setMessage("Signup successful! Please check your email.");
+      const isCustomer = formData.accountType === "Customer";
+      const isFarmer = formData.accountType === "Farmer";
+
+      const payload = {
+        email: formData.email,
+        password: formData.password,
+        phoneNo: formData.phone,
+        firstName,
+        middleName,
+        lastName,
+        accountType: formData.accountType,
+        is_customer: isCustomer,
+        is_farmer: isFarmer,
+        hasAcceptedTerms: formData.hasAcceptedTerms,
+        redirectUrl: "/auth/callback",
+      };
+
+      const res = await axiosInstance.post(
+        "/public/user-app/users/signup",
+        payload
+      );
+
+      // Show a success message and open the modal
+      const success_message = "Signup successful! Please check your email.";
+      setMessage(success_message);
+      toast.success(success_message);
+      setIsModalOpen(true); // Open the modal
     } catch (error: any) {
       console.error(error);
       setMessage(
@@ -72,24 +97,73 @@ export default function Signup() {
     }
   };
 
+  const closeModal = () => {
+    setFormData({
+      email: "",
+      password: "",
+      name: "",
+      phone: "",
+      accountType: "Customer",
+      hasAcceptedTerms: false,
+    });
+    setMessage("");
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="w-full h-full flex flex-col justify-center items-center">
       {/* Form */}
       <form className="max-w-md w-full flex flex-col" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-medium">Sign up</h1>
-        <p className="text-sm text text-foreground">
+        <h1 className="text-2xl font-medium text-center">Sign up</h1>
+        <p className="text-sm text-center text-foreground">
           Already have an account?{" "}
           <Link className="text-primary font-medium underline" href="/sign-in">
             Sign in
           </Link>
         </p>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <div className="flex flex-col gap-2 mt-8">
+          {/* ACCOUNT TYPE */}
+          <Label htmlFor="accountType" className="mt-4">
+            Account Type
+          </Label>
+          <div className="flex gap-6">
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="farmer"
+                name="accountType"
+                value="Farmer"
+                checked={formData.accountType === "Farmer"}
+                onChange={handleChange}
+                className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <Label htmlFor="farmer" className="ml-2 text-sm text-gray-700">
+                Farmer
+              </Label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="customer"
+                name="accountType"
+                value="Customer"
+                checked={formData.accountType === "Customer"}
+                onChange={handleChange}
+                className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <Label htmlFor="customer" className="ml-2 text-sm text-gray-700">
+                Customer
+              </Label>
+            </div>
+          </div>
+
           {/* EMAIL */}
           <Label htmlFor="email">Email</Label>
           <Input
             name="email"
             placeholder="you@example.com"
             required
+            type="email"
             value={formData.email}
             onChange={handleChange}
           />
@@ -107,7 +181,7 @@ export default function Signup() {
           />
 
           {/* NAME */}
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">Full Name</Label>
           <Input
             name="name"
             placeholder="Your name..."
@@ -117,24 +191,28 @@ export default function Signup() {
           />
 
           {/* PHONE */}
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone">Phone No</Label>
           <Input
             type="text"
             name="phone"
-            placeholder="Your phone..."
+            placeholder="Your phone no..."
             value={formData.phone}
             onChange={handleChange}
           />
 
           {/* TERMS */}
-          <Label htmlFor="hasAcceptedTerms">Agree</Label>
-          <input
-            type="checkbox"
-            id="hasAcceptedTerms"
-            name="hasAcceptedTerms"
-            value={`${formData.hasAcceptedTerms}`}
-            onChange={handleChange}
-          />
+          <div className="flex gap-2 items-center mt-4">
+            <input
+              type="checkbox"
+              id="hasAcceptedTerms"
+              name="hasAcceptedTerms"
+              value={`${formData?.hasAcceptedTerms}`}
+              onChange={handleChange}
+            />
+            <Label htmlFor="hasAcceptedTerms">
+              Agree to Terms and Conditions
+            </Label>
+          </div>
 
           <button
             type="submit"
@@ -144,23 +222,30 @@ export default function Signup() {
             {loading ? "Signing up..." : "Sign up"}
           </button>
 
-          {message && <p className="text-red-500 mt-4">{message}</p>}
+          {message && <p className="text-green-500 mt-4">{message}</p>}
         </div>
       </form>
 
-      {/* Google Sign-In */}
-      {/* <form className="w-full max-w-md">
-        <button className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition mb-4 disabled:opacity-50 disabled:cursor-not-allowed">
-          <Image
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-            width={20}
-            height={20}
-            className="w-5 h-5"
-          />
-          Continue with Google
-        </button>
-      </form> */}
+      {/* Modal for success message */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg w-96 text-center">
+            <h2 className="text-xl font-semibold text-green-600">
+              Verification Email Sent!
+            </h2>
+            <p className="text-sm text-gray-600 mt-2">
+              Please check your inbox and follow the instructions to verify your
+              account.
+            </p>
+            <button
+              onClick={closeModal}
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
